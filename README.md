@@ -1,7 +1,7 @@
 # BETH (Benchmarking Ethereum)
 Beth is a tool to write benchmark for Solidity snippets and Smart Contract.
 
-Beth gives as an out put:
+Beth gives as an output:
 * The Average Gas Usage
 * The Average Gas Usage for execution only
 * Average Computation time for Ethereum to execute the code in µs(nanoseconds).
