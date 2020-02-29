@@ -42,8 +42,8 @@ Average Gas Usage: 21284 Gas
 Average Gas Usage per execution: 284 Gas
 ```
 BETH benchmarks every method of every smart contract in a given solidity file that:
-* Benchmark at the beggining of its name (Are ignored)
-* Requires 0 arguments (Throws error)
+* Benchmark at the beggining of its name (if not: the method is ignored)
+* Requires 0 arguments (if more argument BETH gives out an error message)
 
 so the following bechmarks won't be executed:
 ```js
@@ -51,7 +51,7 @@ pragma solidity ^0.5.0;
 
 contract N {
 
-    function One() public returns(uint) { // Does no have Benchmark at the beggining of the name
+    function One() public returns(uint) { // Does not have Benchmark at the beggining of the name
         return 1;
     }
 
