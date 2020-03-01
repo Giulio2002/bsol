@@ -7,8 +7,8 @@ Beth gives as an output:
 * Average Computation time for Ethereum to execute the code in µs(nanoseconds).
 ## Install
 ```
-git clone https://github.com/Giulio2002/beth
-cd beth
+git clone https://github.com/Giulio2002/bsol
+cd bsol
 sudo sh install.sh
 ```
 ## Usage
