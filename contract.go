@@ -120,7 +120,7 @@ func executeBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.Tr
 				fmt.Printf("Average Computation time: %fµs\n", totalTime/float64(runs))
 			}
 			fmt.Printf("Gas Usage: %d Gas\n", tx.Gas())
-			fmt.Printf("Gas Usage per execution: %d Gas\n\n", tx.Gas()-21000)
+			fmt.Printf("Gas Usage per execution: %d Gas\n", tx.Gas()-21000)
 			if err != nil {
 				return err
 			}
