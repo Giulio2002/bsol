@@ -62,7 +62,8 @@ contract N {
 ```
 ## Flag Options
 ```
---runs: Number of Runs to calculate averages
+--runs: Number of Runs to calculate averages (enabled only if --execution-time is set)
 --sol: Solidity source file to benchmark
---sol-dir: Solidity source directory to benchmark
+--sol-dir: Solidity source directory to 
+--execution-time calculate execution time
 ```

@@ -1,5 +1,5 @@
 pragma solidity ^0.5.0;
-// Imports are supported. Execute also other benchmarks within the import
+// Imports are supported. Execute also other benchmarks within the import.
 import "./one.sol";
 
 contract A {
