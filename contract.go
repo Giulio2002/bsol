@@ -29,6 +29,9 @@ func deployBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.Tra
 	}
 	var data []ContractData
 	for contractName, contract := range contracts {
+		if strings.Index(strings.Split(contractName, ":")[1], "Benchmark") != 0 {
+			continue
+		}
 		var names []string
 		if err != nil {
 			return nil, err
@@ -45,7 +48,7 @@ func deployBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.Tra
 			mapped := method.(map[string]interface{})
 			if mapped["name"] == nil {
 				if len(mapped["inputs"].([]interface{})) != 0 {
-					return nil, fmt.Errorf("Invalid Benchmark: constructor should require 0 arguments, but it requires %d", len(mapped["inputs"].([]interface{})))
+					return nil, fmt.Errorf("Invalid Benchmark: %s: constructor should require 0 arguments")
 				}
 				continue
 			}

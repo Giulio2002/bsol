@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
-contract TestLoop {
+contract BenchmarkLoop {
 
-    function BenchmarkLoop() public {
+    function BenchmarkFor() public {
         for (uint index = 0; index < 1000; index++) {}
     }
 }

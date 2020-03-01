@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-contract Sub {
+contract BenchmarkSub {
 
     function BenchmarkOne() public returns(uint) {
         return 1;

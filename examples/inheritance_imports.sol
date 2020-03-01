@@ -13,14 +13,14 @@ contract A {
     }
 }
 
-contract B is A {
+contract BenchmarkB is A {
 
-    function BenchmarkActive() public {
+    function Active() public {
         super.active();
     }
 }
 
-contract P is TestOne {
+contract BenchmarkInheritance is BenchmarkTest {
     A active;
     constructor() public {
         active = new A();
