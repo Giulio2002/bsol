@@ -1,7 +1,7 @@
-# BETH (Benchmarking Ethereum)
-Beth is a tool to write benchmark for Solidity snippets and Smart Contract.
+# BSOL (Benchmarking Solidity)
+BSOL is a tool to write benchmark for Solidity snippets and Smart Contract.
 
-Beth gives as an output:
+BSOL gives as an output:
 * The Average Gas Usage
 * The Average Gas Usage for execution only
 * Average Computation time for Ethereum to execute the code in µs(nanoseconds).
@@ -27,7 +27,7 @@ contract N {
     }
 }
 ```
-to execute the benchmarks just uses `beth --sol N.sol --execution-time`.
+to execute the benchmarks just uses `bsol --sol N.sol --execution-time`.
 
 ```
 Contract: N
@@ -41,9 +41,9 @@ Average Computation time: 34.421126µs
 Average Gas Usage: 21284 Gas
 Average Gas Usage per execution: 284 Gas
 ```
-BETH benchmarks every method of every smart contract in a given solidity file that:
+BSOL benchmarks every method of every smart contract in a given solidity file that:
 * Benchmark at the beggining of its name (if not: the method is ignored)
-* Requires 0 arguments (if more argument BETH gives out an error message)
+* Requires 0 arguments (if more argument BSOL gives out an error message)
 
 so the following bechmarks won't be executed:
 ```js
