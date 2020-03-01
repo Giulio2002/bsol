@@ -23,7 +23,7 @@ func main() {
 	}
 
 	if *sol != "" {
-		err := beth(*runs, *time, *sol)
+		err := bsol(*runs, *time, *sol)
 		if err != nil {
 			fmt.Print(err.Error())
 		}
@@ -38,7 +38,7 @@ func main() {
 			src = append(src, path)
 			return nil
 		})
-		err = beth(*runs, *time, src...)
+		err = bsol(*runs, *time, src...)
 		if err != nil {
 			fmt.Print(err.Error())
 		}

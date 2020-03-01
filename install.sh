@@ -1,2 +1,2 @@
 go build
-cp beth /bin
+cp bsol /bin

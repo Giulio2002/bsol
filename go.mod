@@ -1,4 +1,4 @@
-module github.com/Giulio2002/beth
+module github.com/Giulio2002/bsol
 
 go 1.13
 
