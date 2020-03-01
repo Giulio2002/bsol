@@ -27,7 +27,7 @@ contract N {
     }
 }
 ```
-to execute the benchmarks just uses `beth --sol N.sol`.
+to execute the benchmarks just uses `beth --sol N.sol --execution-time`.
 
 ```
 Contract: N

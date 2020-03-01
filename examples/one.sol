@@ -10,7 +10,7 @@ contract TestOne {
         return 2;
     }
 
-    function Lol() public returns(uint) {
+    function Lol() public returns(uint) { // Won't be executed
         return 3;
     }
 }

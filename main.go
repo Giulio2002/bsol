@@ -10,6 +10,7 @@ import (
 
 func main() {
 	runs := flag.Uint64("runs", 1500, "Count of runs per execution to calculate average. Default: 1500")
+	time := flag.Bool("--execution-time", false, "calculate average execution time")
 	sol := flag.String("sol", "", "Solidity file to benchmark")
 	sol_dir := flag.String("sol-dir", "", "Directory of benchmark smart contracts")
 	flag.Parse()
@@ -22,21 +23,24 @@ func main() {
 	}
 
 	if *sol != "" {
-		err := beth(*runs, *sol)
+		err := beth(*runs, *time, *sol)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Print(err.Error())
 		}
 	}
-
+	_ = time
 	if *sol_dir != "" {
+		var src []string
 		err := filepath.Walk(*sol_dir, func(path string, info os.FileInfo, err error) error {
 			if !strings.Contains(path, ".sol") {
 				return nil
 			}
-			return beth(*runs, path)
+			src = append(src, path)
+			return nil
 		})
+		err = beth(*runs, *time, src...)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Print(err.Error())
 		}
 	}
 }

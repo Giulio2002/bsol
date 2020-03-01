@@ -15,7 +15,7 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 )
 
-func beth(runs uint64, source string) error {
+func beth(runs uint64, time bool, source ...string) error {
 	// Configure and generate a sample block chain
 	var (
 		memDb   = memorydb.New()
@@ -59,12 +59,12 @@ func beth(runs uint64, source string) error {
 	transactOpts.GasPrice = big.NewInt(1)
 	_ = transactOpts
 	_ = contractBackend
-	data, err := deployBenchmarks(source, contractBackend, transactOpts)
+	data, err := deployBenchmarks(contractBackend, transactOpts, source)
 	if err != nil {
 		return fmt.Errorf("Error: %s\n", err.Error())
 
 	}
-	err = executeBenchmarks(contractBackend, transactOpts, data, runs)
+	err = executeBenchmarks(contractBackend, transactOpts, data, runs, time)
 	if err != nil {
 		return fmt.Errorf("Error: %s\n", err.Error())
 	}

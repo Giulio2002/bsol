@@ -16,15 +16,14 @@ import (
 )
 
 type ContractData struct {
-	address      common.Address
 	a            abi.ABI
-	contract     *bind.BoundContract
+	code         string
 	names        []string
 	contractName string
 }
 
-func deployBenchmarks(path string, contractBackend *backends.SimulatedBackend, opts *bind.TransactOpts) ([]ContractData, error) {
-	contracts, err := compiler.CompileSolidity("", path)
+func deployBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.TransactOpts, path []string) ([]ContractData, error) {
+	contracts, err := compiler.CompileSolidity("", path...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,9 +41,14 @@ func deployBenchmarks(path string, contractBackend *backends.SimulatedBackend, o
 		if err != nil {
 			return nil, err
 		}
-		address, _, c, err := bind.DeployContract(opts, abi, common.Hex2Bytes(contract.Code[2:]), contractBackend)
 		for _, method := range contract.Info.AbiDefinition.([]interface{}) {
 			mapped := method.(map[string]interface{})
+			if mapped["name"] == nil {
+				if len(mapped["inputs"].([]interface{})) != 0 {
+					return nil, fmt.Errorf("Invalid Benchmark: constructor should require 0 arguments, but it requires %d", len(mapped["inputs"].([]interface{})))
+				}
+				continue
+			}
 			name := mapped["name"].(string)
 			if strings.Index(name, "Benchmark") != 0 {
 				continue
@@ -57,13 +61,13 @@ func deployBenchmarks(path string, contractBackend *backends.SimulatedBackend, o
 		if err != nil {
 			return nil, err
 		}
-		data = append(data, ContractData{address, abi, c, names, strings.Split(contractName, ":")[1]})
+		data = append(data, ContractData{abi, contract.Code, names, strings.Split(contractName, ":")[1]})
 	}
 	contractBackend.Commit()
 	return data, nil
 }
 
-func executeBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.TransactOpts, data []ContractData, runs uint64) error {
+func executeBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.TransactOpts, data []ContractData, runs uint64, isTime bool) error {
 	for _, contractData := range data {
 		fmt.Printf("Contract: %s", contractData.contractName)
 		if len(contractData.names) == 0 {
@@ -72,25 +76,48 @@ func executeBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.Tr
 		} else {
 			fmt.Println()
 		}
+		if isTime == false {
+			runs = 1
+		}
 		for _, method := range contractData.names {
-			var totalGas uint64
 			var tx *types.Transaction
 			var err error
 			var i uint64
+			var addresses []common.Address
+			var totalTime float64
 			for ; i < runs; i++ {
-				tx, err = contractData.contract.Transact(opts, method)
+				addr, _, _, err := bind.DeployContract(opts, contractData.a, common.Hex2Bytes(contractData.code[2:]), contractBackend)
 				if err != nil {
 					return err
 				}
-				totalGas += tx.Gas()
+				addresses = append(addresses, addr)
 			}
-			start := time.Now()
 			contractBackend.Commit()
-			totalTime := convertElapsedToNano(time.Since(start).String())
+			i = 0
+			for ; i < runs; i++ {
+				c := bind.NewBoundContract(addresses[i], contractData.a, contractBackend, contractBackend, contractBackend)
+				if err != nil {
+					return err
+				}
+				tx, err = c.Transact(opts, method)
+				if err != nil {
+					return err
+				}
+			}
+			if isTime {
+				start := time.Now()
+				contractBackend.Commit()
+				totalTime = convertElapsedToNano(time.Since(start).String())
+			} else {
+				contractBackend.Commit()
+			}
+
 			fmt.Printf("Method: %s.%s()\n", contractData.contractName, method)
-			fmt.Printf("Average Computation time: %fµs\n", totalTime/float64(runs))
-			fmt.Printf("Average Gas Usage: %d Gas\n", totalGas/runs)
-			fmt.Printf("Average Gas Usage per execution: %d Gas\n\n", (totalGas/runs)-21000)
+			if isTime {
+				fmt.Printf("Average Computation time: %fµs\n", totalTime/float64(runs))
+			}
+			fmt.Printf("Average Gas Usage: %d Gas\n", tx.Gas())
+			fmt.Printf("Average Gas Usage per execution: %d Gas\n\n", tx.Gas()-21000)
 			if err != nil {
 				return err
 			}
