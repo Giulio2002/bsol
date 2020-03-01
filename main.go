@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	runs := flag.Uint64("runs", 1500, "Count of runs per execution to calculate average. Default: 1500")
+	runs := flag.Uint64("runs", 500, "Count of runs per execution to calculate average. Default: 1500")
 	time := flag.Bool("execution-time", false, "calculate average execution time")
 	sol := flag.String("sol", "", "Solidity file to benchmark")
 	sol_dir := flag.String("sol-dir", "", "Directory of benchmark smart contracts")
