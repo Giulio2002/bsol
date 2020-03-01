@@ -72,7 +72,7 @@ func deployBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.Tra
 
 func executeBenchmarks(contractBackend *backends.SimulatedBackend, opts *bind.TransactOpts, data []ContractData, runs uint64, isTime bool) error {
 	for _, contractData := range data {
-		fmt.Printf("Contract: %s", contractData.contractName)
+		fmt.Printf("\nContract: %s", contractData.contractName)
 		if len(contractData.names) == 0 {
 			fmt.Printf(" (No Benchmarks)\n")
 			continue
